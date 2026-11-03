@@ -1,0 +1,266 @@
+<!doctype html>
+<!--
+  Source of cover.png (1280×640, GitHub social preview). Needs `npm install` first (fonts come
+  from node_modules). Re-render from the repo root with headless Edge or Chrome, e.g.:
+    msedge --headless=new --hide-scrollbars --window-size=1280,640 \
+      --screenshot=docs/images/cover.png docs/images/cover.html
+-->
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Countdown Studio cover</title>
+    <style>
+      @font-face {
+        font-family: 'Bricolage';
+        src: url(../../node_modules/@fontsource-variable/bricolage-grotesque/files/bricolage-grotesque-latin-wght-normal.woff2) format('woff2');
+        font-weight: 200 800;
+      }
+      @font-face {
+        font-family: 'Shoulders';
+        src: url(../../node_modules/@fontsource-variable/big-shoulders-display/files/big-shoulders-display-latin-wght-normal.woff2) format('woff2');
+        font-weight: 100 900;
+      }
+      @font-face {
+        font-family: 'Fraunces';
+        src: url(../../node_modules/@fontsource-variable/fraunces/files/fraunces-latin-opsz-normal.woff2) format('woff2');
+        font-weight: 100 900;
+      }
+      @font-face {
+        font-family: 'Oswald';
+        src: url(../../node_modules/@fontsource-variable/oswald/files/oswald-latin-wght-normal.woff2) format('woff2');
+        font-weight: 200 700;
+      }
+      @font-face {
+        font-family: 'Doto';
+        src: url(../../node_modules/@fontsource-variable/doto/files/doto-latin-wght-normal.woff2) format('woff2');
+        font-weight: 100 900;
+      }
+
+      :root {
+        --bg: #05060d;
+        --ink: #e9edff;
+        --muted: #8a93b9;
+        --accent: #34f5d0;
+        --accent-2: #ff3d9a;
+        --tally: #ff3b5c;
+      }
+      * {
+        box-sizing: border-box;
+        margin: 0;
+      }
+      html,
+      body {
+        width: 1280px;
+        height: 640px;
+        overflow: hidden;
+      }
+      body {
+        position: relative;
+        font-family: 'Bricolage', sans-serif;
+        color: var(--ink);
+        background:
+          radial-gradient(900px 600px at -5% -20%, color-mix(in oklab, var(--accent) 22%, transparent), transparent 65%),
+          radial-gradient(800px 600px at 110% 125%, color-mix(in oklab, var(--accent-2) 20%, transparent), transparent 60%),
+          var(--bg);
+      }
+      body::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: repeating-linear-gradient(180deg, rgb(255 255 255 / 0.025) 0 1px, transparent 1px 3px);
+      }
+
+      .left {
+        position: absolute;
+        left: 80px;
+        top: 92px;
+        width: 520px;
+      }
+      .on-air {
+        display: inline-flex;
+        align-items: center;
+        gap: 12px;
+        padding: 8px 18px;
+        border: 2px solid color-mix(in oklab, var(--tally) 50%, transparent);
+        border-radius: 999px;
+        color: var(--tally);
+        font-weight: 800;
+        font-size: 18px;
+        letter-spacing: 0.24em;
+      }
+      .on-air i {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: var(--tally);
+        box-shadow: 0 0 0 6px color-mix(in oklab, var(--tally) 25%, transparent), 0 0 14px var(--tally);
+      }
+      h1 {
+        margin-top: 30px;
+        font-size: 92px;
+        line-height: 0.95;
+        font-weight: 800;
+        letter-spacing: -0.03em;
+      }
+      h1 span {
+        color: var(--accent);
+      }
+      .tagline {
+        margin-top: 26px;
+        font-size: 27px;
+        line-height: 1.35;
+        color: var(--muted);
+      }
+      .tagline b {
+        color: var(--ink);
+        font-weight: 600;
+      }
+      .themes {
+        display: flex;
+        gap: 14px;
+        margin-top: 40px;
+      }
+      .swatch {
+        display: grid;
+        place-items: center;
+        width: 92px;
+        height: 72px;
+        border-radius: 18px;
+        border: 2px solid rgb(255 255 255 / 0.08);
+        font-size: 40px;
+        line-height: 1;
+      }
+      .neon {
+        background: #0b0e1b;
+        font-family: 'Shoulders';
+        font-weight: 800;
+        color: #c9fff3;
+        text-shadow: 0 0 6px var(--accent);
+        border-color: var(--accent);
+      }
+      .minimal {
+        background: #f3efe6;
+        font-family: 'Fraunces';
+        font-weight: 300;
+        color: #1d1a16;
+      }
+      .flip {
+        background: #1c1c1f;
+        font-family: 'Oswald';
+        font-weight: 600;
+        color: #f5f1e8;
+      }
+      .flip span {
+        padding: 4px 6px;
+        border-radius: 6px;
+        background: linear-gradient(180deg, #34353a 50%, #26272b 50%);
+      }
+      .led {
+        background: #130e0b;
+        font-family: 'Doto';
+        font-weight: 900;
+        color: #ffb347;
+        text-shadow: 0 0 8px #ff9a1f;
+      }
+
+      .stage {
+        position: absolute;
+        right: 70px;
+        top: 50%;
+        width: 520px;
+        height: 520px;
+        transform: translateY(-50%);
+      }
+      .stage svg {
+        overflow: visible;
+        position: absolute;
+        inset: 0;
+      }
+      .clock {
+        position: absolute;
+        inset: 0;
+        display: grid;
+        place-items: center;
+        align-content: center;
+        gap: 6px;
+      }
+      .digits {
+        display: flex;
+        align-items: center;
+        font-family: 'Shoulders';
+        font-weight: 800;
+        font-size: 210px;
+        line-height: 1;
+        color: #c9fff3;
+        text-shadow: 0 0 4px #fff, 0 0 18px var(--accent), 0 0 60px color-mix(in oklab, var(--accent) 55%, transparent);
+      }
+      .digits .sep {
+        display: flex;
+        flex-direction: column;
+        gap: 40px;
+        margin: 18px 12px 0;
+      }
+      .digits .sep i {
+        width: 18px;
+        height: 18px;
+        border-radius: 3px;
+        background: #c9fff3;
+        opacity: 0.75;
+        box-shadow: 0 0 20px var(--accent);
+      }
+      .units {
+        display: flex;
+        gap: 150px;
+        font-weight: 700;
+        font-size: 18px;
+        letter-spacing: 0.3em;
+        color: var(--muted);
+      }
+      .label {
+        font-size: 30px;
+        font-weight: 700;
+        margin-bottom: 4px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="left">
+      <div class="on-air"><i></i>ON AIR</div>
+      <h1>Countdown<br /><span>Studio</span></h1>
+      <p class="tagline">
+        <b>Many countdowns, one stage.</b><br />
+        Any time zone, full-screen digits, share by link. Runs in your browser.
+      </p>
+      <div class="themes">
+        <div class="swatch neon">12</div>
+        <div class="swatch minimal">12</div>
+        <div class="swatch flip"><span>12</span></div>
+        <div class="swatch led">12</div>
+      </div>
+    </div>
+
+    <div class="stage">
+      <svg viewBox="0 0 520 520" aria-hidden="true">
+        <circle cx="260" cy="260" r="248" fill="none" stroke="rgb(233 237 255 / 0.1)" stroke-width="10" />
+        <circle
+          cx="260"
+          cy="260"
+          r="248"
+          fill="none"
+          stroke="#34f5d0"
+          stroke-width="10"
+          stroke-linecap="round"
+          stroke-dasharray="1558"
+          stroke-dashoffset="640"
+          transform="rotate(-90 260 260)"
+          style="filter: drop-shadow(0 0 12px #34f5d0)"
+        />
+      </svg>
+      <div class="clock">
+        <div class="label">Focus</div>
+        <div class="digits">14<span class="sep"><i></i><i></i></span>32</div>
+        <div class="units"><span>MIN</span><span>SEC</span></div>
+      </div>
+    </div>
+  </body>
+</html>
