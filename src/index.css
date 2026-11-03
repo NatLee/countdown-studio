@@ -1,0 +1,790 @@
+@import 'tailwindcss';
+
+/*
+ * Themes. Each [data-theme] block sets the same --cs-* variables; everything else reads them.
+ * Tailwind utilities map onto them below (bg-bg, text-accent, font-digits, …).
+ *
+ *   --cs-digit-w / --cs-sep-w   width of one digit / one ":" in em. The clock uses them to work
+ *                               out how big it can be and still fit its box (see .clock).
+ *   --cs-clock-h                height of a digit row in em (taller for flip cards).
+ */
+
+@theme inline {
+  --color-bg: var(--cs-bg);
+  --color-surface: var(--cs-surface);
+  --color-raised: var(--cs-raised);
+  --color-line: var(--cs-line);
+  --color-ink: var(--cs-ink);
+  --color-muted: var(--cs-muted);
+  --color-accent: var(--cs-accent);
+  --color-on-accent: var(--cs-on-accent);
+  --color-tally: var(--cs-tally);
+  --font-ui: var(--cs-font-ui);
+  --font-digits: var(--cs-font-digits);
+}
+
+:root {
+  --cs-font-ui: 'Bricolage Grotesque Variable', ui-sans-serif, system-ui, sans-serif;
+  --cs-clock-h: 1;
+  --cs-digit-weight: 700;
+  --cs-digit-glow: none;
+  --cs-grain: 0.05;
+}
+
+[data-theme='neon'] {
+  color-scheme: dark;
+  --cs-bg: #05060d;
+  --cs-surface: #0b0e1b;
+  --cs-raised: #141a2e;
+  --cs-line: #1f2846;
+  --cs-ink: #e9edff;
+  --cs-muted: #8a93b9;
+  --cs-accent: #34f5d0;
+  --cs-accent-2: #ff3d9a;
+  --cs-on-accent: #02201a;
+  --cs-tally: #ff3b5c;
+  --cs-font-digits: 'Big Shoulders Display Variable', 'Oswald Variable', sans-serif;
+  --cs-digit-weight: 800;
+  --cs-digit-color: #c9fff3;
+  --cs-digit-glow: 0 0 0.02em #ffffff, 0 0 0.08em var(--cs-accent), 0 0 0.3em color-mix(in oklab, var(--cs-accent) 55%, transparent);
+  --cs-digit-w: 0.52;
+  --cs-sep-w: 0.26;
+  --cs-dot: 0.085em;
+  --cs-dot-radius: 0.015em;
+  --cs-dot-glow: 0 0 0.12em var(--cs-accent);
+  --cs-sep-nudge: 0.04em;
+  --cs-backdrop:
+    radial-gradient(70rem 45rem at 0% -20%, color-mix(in oklab, var(--cs-accent) 16%, transparent), transparent 65%),
+    radial-gradient(60rem 45rem at 110% 120%, color-mix(in oklab, var(--cs-accent-2) 14%, transparent), transparent 60%);
+}
+
+[data-theme='minimal'] {
+  color-scheme: light;
+  --cs-bg: #f3efe6;
+  --cs-surface: #fbf9f4;
+  --cs-raised: #ece6da;
+  --cs-line: #ddd4c4;
+  --cs-ink: #1d1a16;
+  --cs-muted: #6f675b;
+  --cs-accent: #d9412a;
+  --cs-accent-2: #1d1a16;
+  --cs-on-accent: #ffffff;
+  --cs-tally: #d9412a;
+  --cs-font-digits: 'Fraunces Variable', Georgia, serif;
+  --cs-digit-weight: 300;
+  --cs-digit-color: #1d1a16;
+  --cs-digit-w: 0.62;
+  --cs-sep-w: 0.3;
+  --cs-dot: 0.06em;
+  --cs-dot-opacity: 0.35;
+  --cs-sep-nudge: 0.1em;
+  --cs-grain: 0.035;
+  --cs-backdrop: radial-gradient(80rem 50rem at 50% -10%, #fffdf8, transparent 70%);
+}
+
+[data-theme='flip'] {
+  color-scheme: dark;
+  --cs-bg: #141416;
+  --cs-surface: #1c1c1f;
+  --cs-raised: #27272b;
+  --cs-line: #313136;
+  --cs-ink: #f3efe6;
+  --cs-muted: #94908a;
+  --cs-accent: #ffc83d;
+  --cs-accent-2: #ff7a3d;
+  --cs-on-accent: #1d1500;
+  --cs-tally: #ff4d3d;
+  --cs-font-digits: 'Oswald Variable', 'Arial Narrow', sans-serif;
+  --cs-digit-weight: 600;
+  --cs-digit-color: #f5f1e8;
+  --cs-digit-w: 0.74;
+  --cs-sep-w: 0.26;
+  --cs-dot: 0.08em;
+  --cs-clock-h: 1.3;
+  --cs-flip-card: linear-gradient(180deg, #34353a, #2a2b2f);
+  --cs-flip-card-bottom: linear-gradient(180deg, #27282c, #222326);
+  --cs-backdrop: radial-gradient(70rem 40rem at 50% -20%, #26262b, transparent 70%);
+}
+
+[data-theme='led'] {
+  color-scheme: dark;
+  --cs-bg: #0b0806;
+  --cs-surface: #130e0b;
+  --cs-raised: #1d1611;
+  --cs-line: #2c2219;
+  --cs-ink: #fbe9d2;
+  --cs-muted: #a68c70;
+  --cs-accent: #ff9a1f;
+  --cs-accent-2: #ff5a1f;
+  --cs-on-accent: #1f1000;
+  --cs-tally: #ff4a2e;
+  --cs-font-digits: 'Doto Variable', ui-monospace, monospace;
+  --cs-digit-weight: 900;
+  --cs-digit-color: #ffb347;
+  --cs-digit-glow: 0 0 0.05em var(--cs-accent), 0 0 0.25em color-mix(in oklab, var(--cs-accent) 50%, transparent);
+  /* Doto is monospaced: every digit is 0.6 em wide. */
+  --cs-digit-w: 0.64;
+  --cs-sep-w: 0.3;
+  --cs-dot: 0.1em;
+  --cs-dot-radius: 0.02em;
+  --cs-dot-glow: 0 0 0.1em var(--cs-accent);
+  --cs-dot-opacity: 0.85;
+  --cs-sep-nudge: 0.12em;
+  --cs-backdrop: radial-gradient(circle at 1px 1px, color-mix(in oklab, var(--cs-accent) 9%, transparent) 1px, transparent 1.6px) 0 0 / 14px 14px;
+}
+
+/* ---------------------------------------------------------------- base */
+
+@layer base {
+  html {
+    background: var(--cs-bg);
+    color: var(--cs-ink);
+    font-family: var(--cs-font-ui);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  body {
+    min-height: 100dvh;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--cs-accent);
+    outline-offset: 2px;
+  }
+
+  ::selection {
+    background: color-mix(in oklab, var(--cs-accent) 35%, transparent);
+  }
+}
+
+/* Film grain over everything, for depth. Decorative only. */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  pointer-events: none;
+  opacity: var(--cs-grain);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+.app-backdrop {
+  background: var(--cs-backdrop), var(--cs-bg);
+  background-attachment: fixed;
+}
+
+/* ---------------------------------------------------------------- clock face */
+
+.clock {
+  --units: calc(var(--cells) * var(--cs-digit-w) + var(--seps) * var(--cs-sep-w));
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  font-family: var(--cs-font-digits);
+  font-weight: var(--cs-digit-weight);
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+  color: var(--cs-digit-color);
+  text-shadow: var(--cs-digit-glow);
+  font-size: var(--clock-size);
+  user-select: none;
+}
+
+/* Fill the card's width, but stop growing on wide cards. */
+.clock-card {
+  --clock-size: min(calc(100cqw / var(--units)), 5.5rem);
+}
+
+/* The local time in the header. */
+.clock-inline {
+  --clock-size: 1.55rem;
+  --cs-clock-h: 1;
+  align-items: center;
+  text-shadow: none;
+}
+
+/* The only card on the page: the old page's single big countdown. */
+.clock-feature {
+  --clock-size: min(calc(96cqw / var(--units)), 10rem);
+}
+
+/* Fill the screen: as wide as fits, and never taller than about half of it. */
+.clock-stage {
+  --clock-size: min(calc(94cqw / var(--units)), calc(52cqh / var(--cs-clock-h)));
+}
+
+.clock-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.clock-digits {
+  display: flex;
+}
+
+.clock-digit {
+  display: block;
+  width: calc(var(--cs-digit-w) * 1em);
+  text-align: center;
+}
+
+.clock-sep {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.2em;
+  width: calc(var(--cs-sep-w) * 1em);
+  height: calc(var(--cs-clock-h) * 1em);
+  /* Lines the dots up with the middle of the digits rather than the middle of the line box. */
+  padding-top: var(--cs-sep-nudge, 0);
+}
+
+.clock-sep i {
+  width: var(--cs-dot, 0.1em);
+  aspect-ratio: 1;
+  border-radius: var(--cs-dot-radius, 50%);
+  background: currentColor;
+  opacity: var(--cs-dot-opacity, 0.6);
+  box-shadow: var(--cs-dot-glow, none);
+}
+
+.clock-unit {
+  /* A share of the digit size, so flip cards and plain digits get the same breathing room. */
+  margin-top: calc(var(--clock-size) * 0.08);
+  font-family: var(--cs-font-ui);
+  font-size: max(0.6rem, 0.1em);
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  text-shadow: none;
+  color: var(--cs-muted);
+}
+
+[data-theme='minimal'] .clock {
+  font-optical-sizing: auto;
+}
+
+/* Split-flap cards (Flip theme). */
+.flip-digit {
+  position: relative;
+  height: calc(var(--cs-clock-h) * 1em);
+  width: calc(var(--cs-digit-w) * 1em - 0.06em);
+  margin-inline: 0.03em;
+  perspective: 4em;
+  line-height: calc(var(--cs-clock-h) * 1em);
+  border-radius: 0.07em;
+  box-shadow: 0 0.04em 0.1em rgb(0 0 0 / 0.5);
+}
+
+.flip-digit::after {
+  content: '';
+  position: absolute;
+  inset-inline: 0;
+  top: 50%;
+  height: max(1px, 0.01em);
+  background: rgb(0 0 0 / 0.45);
+  z-index: 4;
+}
+
+.flip-half {
+  position: absolute;
+  inset-inline: 0;
+  height: 50%;
+  overflow: hidden;
+  backface-visibility: hidden;
+}
+
+.flip-half > span {
+  display: block;
+  height: calc(var(--cs-clock-h) * 1em);
+}
+
+.flip-top {
+  top: 0;
+  border-radius: 0.07em 0.07em 0 0;
+  background: var(--cs-flip-card);
+  transform-origin: bottom;
+}
+
+.flip-bottom {
+  bottom: 0;
+  border-radius: 0 0 0.07em 0.07em;
+  background: var(--cs-flip-card-bottom);
+  transform-origin: top;
+}
+
+.flip-bottom > span {
+  transform: translateY(-50%);
+}
+
+.flip-flap {
+  z-index: 2;
+}
+
+.flip-fold {
+  z-index: 3;
+  animation: cs-fold 0.26s ease-in forwards;
+}
+
+.flip-land {
+  z-index: 3;
+  transform: rotateX(90deg);
+  animation: cs-land 0.26s 0.26s ease-out forwards;
+}
+
+.flip-old-bottom {
+  animation: cs-hide 0s 0.52s forwards;
+}
+
+@keyframes cs-fold {
+  to {
+    transform: rotateX(-90deg);
+  }
+}
+
+@keyframes cs-land {
+  to {
+    transform: rotateX(0deg);
+  }
+}
+
+@keyframes cs-hide {
+  to {
+    visibility: hidden;
+  }
+}
+
+/* ---------------------------------------------------------------- finished */
+
+.finished {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  line-height: 1;
+}
+
+.finished-title {
+  font-family: var(--cs-font-digits);
+  font-weight: var(--cs-digit-weight);
+  color: var(--cs-accent);
+  text-shadow: var(--cs-digit-glow);
+  white-space: nowrap;
+}
+
+.finished-over {
+  margin-top: 0.5rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--cs-tally);
+}
+
+.finished-card .finished-title {
+  font-size: min(15cqw, 4rem);
+}
+
+.finished-card .finished-over {
+  font-size: 1.4rem;
+}
+
+.finished-feature .finished-title {
+  font-size: min(15cqw, 8rem);
+}
+
+.finished-feature .finished-over {
+  font-size: 2rem;
+}
+
+.finished-stage .finished-title {
+  font-size: min(16cqw, 34cqh);
+}
+
+.finished-stage .finished-over {
+  font-size: min(6cqw, 10cqh);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .finished-title {
+    animation: cs-flash 0.9s ease-in-out 3;
+  }
+}
+
+@keyframes cs-flash {
+  50% {
+    opacity: 0.25;
+  }
+}
+
+/* ---------------------------------------------------------------- burst (finish animation) */
+
+.burst {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  container-type: size;
+}
+
+.burst-spark,
+.burst-ring {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+}
+
+.burst-spark {
+  width: var(--s);
+  height: var(--s);
+  border-radius: 2px;
+  opacity: 0;
+  animation: cs-spark 2.4s cubic-bezier(0.3, 0.45, 0.45, 1) var(--delay) forwards;
+}
+
+.burst-spark.tone-0 {
+  background: var(--cs-accent);
+  box-shadow: 0 0 10px var(--cs-accent);
+}
+
+.burst-spark.tone-1 {
+  background: var(--cs-accent-2);
+  box-shadow: 0 0 10px var(--cs-accent-2);
+}
+
+.burst-spark.tone-2 {
+  background: var(--cs-ink);
+}
+
+.burst-ring {
+  width: 20cqmin;
+  aspect-ratio: 1;
+  border: 3px solid var(--cs-accent);
+  border-radius: 50%;
+  opacity: 0;
+  animation: cs-shock 1.4s ease-out forwards;
+}
+
+@keyframes cs-spark {
+  0% {
+    opacity: 1;
+    transform: translate(-50%, -50%) rotate(var(--a)) translateX(0) scale(1);
+  }
+  65% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) rotate(var(--a)) translateX(calc(var(--d) * 1cqmax)) scale(0.3);
+  }
+}
+
+@keyframes cs-shock {
+  0% {
+    opacity: 0.9;
+    transform: translate(-50%, -50%) scale(0.2);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(6);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .burst,
+  .flip-flap {
+    display: none;
+  }
+}
+
+/* ---------------------------------------------------------------- rings, pills, chips */
+
+.ring-track {
+  stroke: color-mix(in oklab, var(--cs-ink) 12%, transparent);
+}
+
+.ring-bar {
+  stroke: var(--cs-accent);
+  transition: stroke-dashoffset 0.3s linear;
+}
+
+.logo-mark .logo-hands {
+  stroke: var(--cs-ink);
+}
+
+.tally {
+  display: inline-block;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 999px;
+  background: var(--cs-muted);
+}
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  flex-shrink: 0;
+  padding: 0.3rem 0.65rem;
+  border: 1px solid var(--cs-line);
+  border-radius: 999px;
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--cs-muted);
+  background: color-mix(in oklab, var(--cs-surface) 70%, transparent);
+}
+
+.pill-counting {
+  color: var(--cs-tally);
+  border-color: color-mix(in oklab, var(--cs-tally) 45%, transparent);
+}
+
+.pill-counting .tally,
+.on-air-live .tally {
+  background: var(--cs-tally);
+  box-shadow: 0 0 0 0 color-mix(in oklab, var(--cs-tally) 60%, transparent), 0 0 10px var(--cs-tally);
+}
+
+.pill-paused .tally {
+  background: var(--cs-accent);
+}
+
+.pill-finished {
+  color: var(--cs-on-accent);
+  background: var(--cs-accent);
+  border-color: var(--cs-accent);
+}
+
+.pill-finished .tally {
+  background: var(--cs-on-accent);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .pill-counting .tally,
+  .on-air-live .tally {
+    animation: cs-tally 1.6s ease-out infinite;
+  }
+}
+
+@keyframes cs-tally {
+  0% {
+    box-shadow: 0 0 0 0 color-mix(in oklab, var(--cs-tally) 60%, transparent), 0 0 10px var(--cs-tally);
+  }
+  70%,
+  100% {
+    box-shadow: 0 0 0 0.45rem transparent, 0 0 10px var(--cs-tally);
+  }
+}
+
+.on-air {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.62rem;
+  font-weight: 800;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--cs-muted);
+}
+
+.on-air-live {
+  color: var(--cs-tally);
+}
+
+.chip {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.4rem;
+  padding: 0.45rem 0.85rem;
+  border: 1px solid var(--cs-line);
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  background: color-mix(in oklab, var(--cs-surface) 80%, transparent);
+  transition:
+    border-color 0.15s,
+    background 0.15s;
+}
+
+.chip:hover {
+  border-color: var(--cs-accent);
+  background: var(--cs-raised);
+}
+
+.chip span {
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+/* ---------------------------------------------------------------- cards */
+
+.card {
+  background: linear-gradient(180deg, color-mix(in oklab, var(--cs-surface) 92%, transparent), color-mix(in oklab, var(--cs-surface) 75%, transparent));
+  backdrop-filter: blur(6px);
+}
+
+.card-selected {
+  box-shadow:
+    0 0 0 1px var(--cs-accent),
+    0 18px 50px -24px color-mix(in oklab, var(--cs-accent) 70%, transparent);
+}
+
+.card-finished {
+  border-color: var(--cs-accent);
+}
+
+/* ---------------------------------------------------------------- theme swatches */
+
+.swatch {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+  min-width: 5rem;
+  padding: 0.6rem 0.8rem 0.5rem;
+  border: 1px solid var(--cs-line);
+  border-radius: 1rem;
+  background: var(--cs-backdrop), var(--cs-bg);
+  color: var(--cs-ink);
+  transition:
+    transform 0.15s,
+    border-color 0.15s;
+}
+
+.swatch:hover {
+  transform: translateY(-1px);
+}
+
+.swatch[aria-checked='true'] {
+  border-color: var(--cs-accent);
+  box-shadow: 0 0 0 1px var(--cs-accent);
+}
+
+.swatch-digits {
+  font-family: var(--cs-font-digits);
+  font-weight: var(--cs-digit-weight);
+  font-size: 1.6rem;
+  line-height: 1;
+  color: var(--cs-digit-color);
+  text-shadow: var(--cs-digit-glow);
+}
+
+.swatch-name {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--cs-muted);
+}
+
+.swatch-compact {
+  min-width: 0;
+  width: 2.5rem;
+  height: 2.25rem;
+  padding: 0;
+  justify-content: center;
+  border-radius: 0.7rem;
+}
+
+.swatch-compact .swatch-digits {
+  font-size: 1.05rem;
+}
+
+/* ---------------------------------------------------------------- forms and dialogs */
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--cs-muted);
+}
+
+.field input {
+  width: 100%;
+  padding: 0.6rem 0.75rem;
+  border: 1px solid var(--cs-line);
+  border-radius: 0.75rem;
+  background: var(--cs-raised);
+  color: var(--cs-ink);
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.field input:focus {
+  outline: none;
+  border-color: var(--cs-accent);
+}
+
+.dialog::backdrop {
+  background: rgb(0 0 0 / 0.55);
+  backdrop-filter: blur(3px);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .dialog[open] {
+    animation: cs-rise 0.18s ease-out;
+  }
+
+  .toast {
+    animation: cs-rise 0.2s ease-out;
+  }
+}
+
+@keyframes cs-rise {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+
+/* ---------------------------------------------------------------- stage mode */
+
+.stage {
+  background: var(--cs-backdrop), var(--cs-bg);
+}
+
+.stage-title {
+  font-size: clamp(1.5rem, 4.5vw, 3.5rem);
+  line-height: 1.1;
+}
+
+.stage-body {
+  container-type: size;
+}
+
+.stage-ring {
+  position: absolute;
+  width: min(88cqw, 92cqh);
+  aspect-ratio: 1;
+  opacity: 0.55;
+}
+
+.stage-ring .ring-bar {
+  filter: drop-shadow(0 0 12px var(--cs-accent));
+}
+
+.stage-controls {
+  transition: opacity 0.4s;
+}
+
+.stage-idle {
+  cursor: none;
+}
+
+.stage-idle .stage-controls {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Scanlines in Neon stage mode, like an old broadcast monitor. */
+[data-theme='neon'] .stage::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(180deg, rgb(255 255 255 / 0.025) 0 1px, transparent 1px 3px);
+}
